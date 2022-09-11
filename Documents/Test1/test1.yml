@@ -1,0 +1,36 @@
+# Remove Local User From Devices Test1 #
+- name: Cisco Syslog Server Configuration
+  hosts: aep01sw01
+  gather_facts: false
+
+  vars: # for execution environment
+    ansible_connection: network_cli
+    ansible_network_os: ios
+
+  vars_prompt:
+
+    - name: term_user
+      prompt: Please put the name of the termination user
+      private: no
+
+  tasks:
+
+    - pause:
+       prompt: The script will remove the following Term User {{ term_user }} be careful since this cannot be undo, press enter to continue or press CTRL+C and then "a" to cancel.
+
+    - name: Removing Term User
+      ios_command:
+          commands:
+            - command: 'configure terminal'
+            - command: 'no username {{ term_user | upper }}'
+              prompt: '[confirm]'
+              answer: 'y'
+
+  post_tasks:
+
+    - debug:
+        msg: "The Playbook ran susccefully"
+        
+# Prueba 2 #
+# Prueba 3 #
+
